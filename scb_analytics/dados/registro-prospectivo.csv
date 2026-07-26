@@ -7,11 +7,11 @@ chave,registrado_em,league,date,home,away,p_v,p_e,p_d,lambda_a,lambda_b,p_over25
 2026-07-22|Chapecoense-SC|Flamengo RJ|BRA,2026-07-18,BRA,2026-07-22,Chapecoense-SC,Flamengo RJ,0.090710,0.205227,0.704064,0.6878,2.0049,0.504571,0.430348,scb-v0.3-mando-e0,0,4,0.137925
 2026-07-22|Internacional|Cruzeiro|BRA,2026-07-18,BRA,2026-07-22,Internacional,Cruzeiro,0.402218,0.276856,0.320926,1.2923,1.1413,0.439036,0.493671,scb-v0.3-mando-e0,1,2,0.699570
 2026-07-22|Sao Paulo|Athletico-PR|BRA,2026-07-18,BRA,2026-07-22,Sao Paulo,Athletico-PR,0.434503,0.274798,0.290699,1.3632,1.0961,0.445719,0.495494,scb-v0.3-mando-e0,1,2,0.767415
-2026-07-23|Corinthians|Remo|BRA,2026-07-19,BRA,2026-07-23,Corinthians,Remo,0.552378,0.247882,0.199741,1.6373,0.9217,0.471230,0.485044,scb-v0.4-sot-goals-e0,,,
-2026-07-23|Botafogo RJ|Vitoria|BRA,2026-07-21,BRA,2026-07-23,Botafogo RJ,Vitoria,0.549811,0.254640,0.195549,1.6205,0.9324,0.469683,0.486452,scb-v0.4-sot-goals-e0,,,
-2026-07-25|Athletico-PR|Internacional|BRA,2026-07-21,BRA,2026-07-25,Athletico-PR,Internacional,0.539237,0.257218,0.203545,1.5964,0.9478,0.467457,0.488303,scb-v0.4-sot-goals-e0,,,
-2026-07-25|Santos|Chapecoense-SC|BRA,2026-07-21,BRA,2026-07-25,Santos,Chapecoense-SC,0.720876,0.198307,0.080817,2.0532,0.6570,0.508878,0.419809,scb-v0.4-sot-goals-e0,,,
-2026-07-25|Vasco|Mirassol|BRA,2026-07-21,BRA,2026-07-25,Vasco,Mirassol,0.418246,0.274906,0.306848,1.3277,1.1187,0.442376,0.494823,scb-v0.4-sot-goals-e0,,,
+2026-07-23|Corinthians|Remo|BRA,2026-07-19,BRA,2026-07-23,Corinthians,Remo,0.552378,0.247882,0.199741,1.6373,0.9217,0.471230,0.485044,scb-v0.4-sot-goals-e0,3,0,0.301707
+2026-07-23|Botafogo RJ|Vitoria|BRA,2026-07-21,BRA,2026-07-23,Botafogo RJ,Vitoria,0.549811,0.254640,0.195549,1.6205,0.9324,0.469683,0.486452,scb-v0.4-sot-goals-e0,0,0,0.896093
+2026-07-25|Athletico-PR|Internacional|BRA,2026-07-21,BRA,2026-07-25,Athletico-PR,Internacional,0.539237,0.257218,0.203545,1.5964,0.9478,0.467457,0.488303,scb-v0.4-sot-goals-e0,2,0,0.319894
+2026-07-25|Santos|Chapecoense-SC|BRA,2026-07-21,BRA,2026-07-25,Santos,Chapecoense-SC,0.720876,0.198307,0.080817,2.0532,0.6570,0.508878,0.419809,scb-v0.4-sot-goals-e0,2,2,1.168905
+2026-07-25|Vasco|Mirassol|BRA,2026-07-21,BRA,2026-07-25,Vasco,Mirassol,0.418246,0.274906,0.306848,1.3277,1.1187,0.442376,0.494823,scb-v0.4-sot-goals-e0,1,1,0.794847
 2026-07-26|Bahia|Corinthians|BRA,2026-07-22,BRA,2026-07-26,Bahia,Corinthians,0.469789,0.269691,0.260520,1.4414,1.0464,0.453052,0.495291,scb-v0.4-sot-goals-e0,,,
 2026-07-26|Bragantino|Coritiba|BRA,2026-07-22,BRA,2026-07-26,Bragantino,Coritiba,0.561612,0.251649,0.186738,1.6475,0.9152,0.472173,0.484137,scb-v0.4-sot-goals-e0,,,
 2026-07-26|Cruzeiro|Botafogo RJ|BRA,2026-07-22,BRA,2026-07-26,Cruzeiro,Botafogo RJ,0.497460,0.265357,0.237183,1.5028,1.0073,0.458781,0.493551,scb-v0.4-sot-goals-e0,,,
@@ -19,3 +19,11 @@ chave,registrado_em,league,date,home,away,p_v,p_e,p_d,lambda_a,lambda_b,p_over25
 2026-07-26|Gremio|Fluminense|BRA,2026-07-22,BRA,2026-07-26,Gremio,Fluminense,0.361802,0.279126,0.359071,1.2031,1.1980,0.430583,0.488563,scb-v0.4-sot-goals-e0,,,
 2026-07-26|Palmeiras|Atletico-MG|BRA,2026-07-22,BRA,2026-07-26,Palmeiras,Atletico-MG,0.708273,0.202945,0.088782,2.0184,0.6792,0.505777,0.427481,scb-v0.4-sot-goals-e0,,,
 2026-07-26|Remo|Vitoria|BRA,2026-07-22,BRA,2026-07-26,Remo,Vitoria,0.459371,0.265723,0.274905,1.4212,1.0593,0.451156,0.495562,scb-v0.4-sot-goals-e0,,,
+2026-07-29|Fluminense|Bahia|BRA,2026-07-26,BRA,2026-07-29,Fluminense,Bahia,0.557184,0.252726,0.190090,1.6374,0.9216,0.471246,0.485029,scb-v0.4-sot-goals-e0,,,
+2026-07-29|Internacional|Flamengo RJ|BRA,2026-07-26,BRA,2026-07-29,Internacional,Flamengo RJ,0.264328,0.270277,0.465395,1.0525,1.4317,0.452143,0.495440,scb-v0.4-sot-goals-e0,,,
+2026-07-29|Mirassol|Remo|BRA,2026-07-26,BRA,2026-07-29,Mirassol,Remo,0.492257,0.259762,0.247981,1.4973,1.0108,0.458268,0.493763,scb-v0.4-sot-goals-e0,,,
+2026-07-29|Vitoria|Palmeiras|BRA,2026-07-26,BRA,2026-07-29,Vitoria,Palmeiras,0.218487,0.261674,0.519839,0.9757,1.5525,0.463393,0.491152,scb-v0.4-sot-goals-e0,,,
+2026-07-30|Corinthians|Athletico-PR|BRA,2026-07-26,BRA,2026-07-30,Corinthians,Athletico-PR,0.483399,0.267971,0.248630,1.4714,1.0273,0.455853,0.494612,scb-v0.4-sot-goals-e0,,,
+2026-07-30|Coritiba|Cruzeiro|BRA,2026-07-26,BRA,2026-07-30,Coritiba,Cruzeiro,0.420393,0.275561,0.304046,1.3323,1.1158,0.442813,0.494938,scb-v0.4-sot-goals-e0,,,
+2026-07-30|Fluminense|Bahia|BRA,2026-07-26,BRA,2026-07-30,Fluminense,Bahia,0.557184,0.252726,0.190090,1.6374,0.9216,0.471246,0.485029,scb-v0.4-sot-goals-e0,,,
+2026-07-30|Vitoria|Palmeiras|BRA,2026-07-26,BRA,2026-07-30,Vitoria,Palmeiras,0.218487,0.261674,0.519839,0.9757,1.5525,0.463393,0.491152,scb-v0.4-sot-goals-e0,,,

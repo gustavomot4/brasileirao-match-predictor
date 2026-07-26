@@ -48,6 +48,14 @@ tivesse chutes/escanteios — e estava errado; uma chamada de jogo terminado pro
 Depois acertei: pedi ao dono uma amostra do `/artilharia` antes de escrever o parser. Olhe o
 payload de verdade primeiro — vale para APIs, conectores e artifacts.
 
+**1b. `200` não é "dado certo" — confira o CONTEÚDO, não o código HTTP.** Cantei "temporadas
+passadas liberadas!" porque `?temporada=2024` respondeu `200`. Era mentira: a API ignorava o
+parâmetro e devolvia 2026. Quem me pegou foi a DATA dentro da resposta (2026-07-22 num suposto
+jogo de 2024) e o `[CHECK]` que eu mesmo pus no script. Sempre valide um CAMPO do payload (data,
+placar, contagem) contra o esperado antes de comemorar. Corolário: para DADO, uma fonte grátis
+ESTRUTURADA (JSON da ESPN) vence um agente de IA transcrevendo texto — o parser lê campo real e
+não alucina (regra 5). IA só entra pra tapar buraco raro, com conferência.
+
 **2. "Barato" não é "valioso".** A artilharia era 1 chamada com o dado na mão — barata — mas
 exibição pura, zero valor preditivo num sistema de PREVISÃO. Eu sugeri; o dono cortou, com razão.
 Não encha o sistema de features só porque são fáceis. Pergunte "isso muda alguma decisão/número?"

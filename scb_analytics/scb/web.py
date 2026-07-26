@@ -440,6 +440,20 @@ def create_app(db_path=DEFAULT_DB):
             conn.close()
         return jsonify(out)
 
+    @app.route("/api/atualizar", methods=["POST"])
+    def api_atualizar():
+        """Um clique: busca a ESPN (grátis) -> grava snapshots -> casa em matches/match_stats
+        -> liquida. Rede só aqui (download à parte); erros viram mensagem, não quebram a web."""
+        from . import espn
+        conn = _conn()
+        try:
+            out = espn.atualizar_rodada(conn)
+        except Exception as e:                       # rede fora/ESPN mudou -> avisa, não derruba
+            return jsonify({"erro": f"{type(e).__name__}: {e}"}), 502
+        finally:
+            conn.close()
+        return jsonify(out)
+
     @app.route("/api/registrar-auto", methods=["POST"])
     def api_registrar_auto():
         dias = int((request.get_json(silent=True) or {}).get("dias", 4))

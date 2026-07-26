@@ -3,15 +3,15 @@
 Port evoluído do `scm_analytics` (D-02) para ligas de pontos corridos, multi-liga (D-03).
 Contrato: `../contexto/MODELO-MATEMATICO.md` (SCB v1.0, congelado). **Verdade viva: `../CONTEXT.md`.**
 
-**Estado (2026-07-21):** M0–M7.1 executadas — modelo oficial **`scb-v0.4-sot-goals-e0`**
-(walk-forward BRA 0,6131 / E0 0,5894). Falta **M7.2** (empacotamento). Detalhe e histórico
-no vault (`../DECISIONS.md`, `../CHANGELOG.md`).
+**Estado (2026-07-22):** M0–M7.2 executadas — modelo oficial **`scb-v0.4-sot-goals-e0`**
+(walk-forward BRA 0,6131 / E0 0,5894). Operação da rodada = **ESPN grátis, 1 clique** (D-42,
+substituiu a API-Futebol paga). Detalhe e histórico no vault (`../DECISIONS.md`, `../CHANGELOG.md`).
 
 ## Rodar (Windows/PowerShell, na raiz `scb_analytics`)
 
 ```
 pip install -r requirements.txt
-python -m pytest -q                  # esperado: 90 passed
+python -m pytest -q                  # esperado: 98 passed
 
 python -m scb.ingest --download      # 1x, baixa snapshot (BRA + 33 temporadas E0)
 python -m scb.ingest                 # dados/*.csv -> dados/scb.sqlite (OFFLINE)
@@ -46,14 +46,21 @@ via API-Futebol, D-36) · **E0 12.704**.
 | `scb/backtest_harness.py` | walk-forward por temporada · 4 réguas · IC bootstrap B=10k |
 | `scb/simulate_league.py` | Monte Carlo da tabela · desempate CBF (D-18) · real travado |
 | `scb/predict_match.py` · `scb/registrar.py` | porta de produção · registro imutável + settle + `registrar auto` (D-31) |
-| `scb/web.py` · `scb/badges.py` | Flask local (Prever · Tabela+Classificação real · Calibração · Jogos · Prospectivo) · escudos SVG |
+| `scb/web.py` · `scb/badges.py` | Flask local (Prever · Tabela+Classificação real · Calibração · Jogos · Prospectivo com filtros/acerto D-43) · escudos SVG |
+| `scb/espn.py` | **2ª fonte GRÁTIS (D-42)**: parser determinístico da API pública da ESPN → botão "⟳ Atualizar rodada" (placar+stats+calendário+settle num clique); substitui a API-Futebol paga |
 | candidatos OFF | `calibrate` `drift` `descanso` `dixon_coles` `mando_rolling` `season_rho` `sot_edge` — testados no portão, flag por liga |
 
 Dados manuais na rodada (lag da fonte): copie `dados/resultados_extra.csv.example` →
 `resultados_extra.csv` e preencha; o ingest carrega sozinho com a guarda anti-duplicata.
 Operação da temporada: `../Operacao BRA 2026.md`.
 
+## Operar a rodada (1 clique)
+
+Na web, tela **Prospectivo** → **⟳ Atualizar rodada (ESPN)**: busca placar + estatísticas +
+calendário na ESPN (grátis) e **liquida** os registros. Requer internet só no clique (o cálculo
+segue offline). Antes do kickoff, **Registrar rodada** grava a previsão imutável.
+
 ## Próximo
 
-**M7.2 — empacotamento** (`../prompts/05-revisao-entrega.md` + `../CHECKLIST.md`): zip só com
-fonte + docs + dados curados (sem `.venv`/`.git`/`__pycache__`/`*.sqlite`/`*.png`), abrir e conferir.
+Evolução gateada (Q-01 peso do mercado · Q-07 banda E0 · Q-08 C4/C6) — um termo por vez, cada um
+com portão (IC>0 + guardas). M0–M7.2 fechadas.
