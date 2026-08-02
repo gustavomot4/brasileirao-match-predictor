@@ -64,7 +64,8 @@ def parse_event(ev: dict) -> Optional[dict]:
     """Um jogo da ESPN -> dict com status + (se finalizado) placar+stats OU (se futuro) só o
     confronto. Retorna None e um motivo se algum time está fora do mapa (NÃO inventa)."""
     comp = (ev.get("competitions") or [ev])[0]
-    state = (((comp.get("status") or ev.get("status") or {}).get("type")) or {}).get("state")
+    tp = ((comp.get("status") or ev.get("status") or {}).get("type")) or {}
+    state, name = tp.get("state"), tp.get("name")
     date = (comp.get("date") or ev.get("date") or "")[:10]
     cs = comp.get("competitors") or []
     home = next((c for c in cs if c.get("homeAway") == "home"), None)
@@ -80,8 +81,14 @@ def parse_event(ev: dict) -> Optional[dict]:
 
     if state == "pre":                       # jogo FUTURO -> fixture
         return {"kind": "fixture", "date": date, "home": H, "away": A}
-    if state != "post":                      # ao vivo / adiado -> ignora (settle espera FT)
-        return {"skip": f"status={state}", "id": ev.get("id"), "date": date, "home": H, "away": A}
+    if name != "STATUS_FULL_TIME":
+        # PEGADINHA: o `state` da ESPN é "post" tanto p/ Full Time QUANTO p/ adiado. Só
+        # STATUS_FULL_TIME é resultado real. Adiado/cancelado vira "cancelado" p/ DESFAZER
+        # um 0-0 fantasma que possa ter sido gravado antes; ao vivo/outros só pula.
+        cancel = name in ("STATUS_POSTPONED", "STATUS_CANCELED", "STATUS_CANCELLED",
+                          "STATUS_ABANDONED", "STATUS_SUSPENDED", "STATUS_FORFEIT")
+        return {"kind": "cancelado" if cancel else "skip",
+                "motivo": f"{name or state}: {H} x {A}", "date": date, "home": H, "away": A}
 
     hs, aws = _int(home.get("score")), _int(away.get("score"))
     hsr = home.get("statistics") or []
@@ -117,19 +124,23 @@ def parse_event(ev: dict) -> Optional[dict]:
 
 def parse_scoreboard(data: dict) -> dict:
     """JSON de /scoreboard -> {results:[row...], fixtures:[{date,home,away}...], skipped:[...]}."""
-    results, fixtures, skipped = [], [], []
+    results, fixtures, cancelados, skipped = [], [], [], []
     for ev in (data.get("events") or []):
         out = parse_event(ev)
         if out is None:
             continue
-        if out.get("kind") == "result":
+        k = out.get("kind")
+        if k == "result":
             results.append(out["row"])
-        elif out.get("kind") == "fixture":
+        elif k == "fixture":
             fixtures.append({"league": "BRA", "round": "", "date": out["date"],
                              "home": out["home"], "away": out["away"]})
-        elif "skip" in out:
-            skipped.append(out["skip"])
-    return {"results": results, "fixtures": fixtures, "skipped": skipped}
+        elif k == "cancelado":                          # adiado/cancelado -> desfazer 0-0 fantasma
+            cancelados.append({"date": out["date"], "home": out["home"], "away": out["away"]})
+            skipped.append(out.get("motivo", "adiado"))
+        else:
+            skipped.append(out.get("motivo") or out.get("skip") or "skip")
+    return {"results": results, "fixtures": fixtures, "cancelados": cancelados, "skipped": skipped}
 
 
 def _calendar_dates(sess, base_json=None) -> list:
@@ -149,7 +160,7 @@ def fetch(dates: Optional[list] = None) -> dict:
     sess.headers.update({"User-Agent": "SCB/1.0 (uso pessoal)"})
     base = sess.get(BASE, timeout=30).json()
     dates = dates or _calendar_dates(sess, base)
-    res, fix, skip = {}, {}, []
+    res, fix, canc, skip = {}, {}, {}, []
     for d in dates:
         try:
             j = sess.get(BASE, params={"dates": d}, timeout=30).json()
@@ -161,9 +172,12 @@ def fetch(dates: Optional[list] = None) -> dict:
             res[(r["date"], r["home"], r["away"])] = r
         for f in p["fixtures"]:
             fix[(f["date"], f["home"], f["away"])] = f
+        for c in p["cancelados"]:
+            canc[(c["date"], c["home"], c["away"])] = c
         skip += p["skipped"]
         time.sleep(0.3)
-    return {"results": list(res.values()), "fixtures": list(fix.values()), "skipped": skip}
+    return {"results": list(res.values()), "fixtures": list(fix.values()),
+            "cancelados": list(canc.values()), "skipped": skip}
 
 
 # ---- aplicar o que a ESPN trouxe nos snapshots em disco (offline; baixo churn) ----------
@@ -174,9 +188,10 @@ def _paths():
     return d / "bra_stats.csv", d / "fixtures.csv"
 
 
-def _write_results(rows: list) -> int:
+def _write_results(rows: list, cancelados=()) -> int:
     """Funde os resultados no bra_stats.csv. Só PREENCHE o que falta (linha ausente ou sem
-    placar) — não sobrescreve dado já completo (evita churn e reescrever fonte verificada)."""
+    placar) — não sobrescreve dado já completo (evita churn e reescrever fonte verificada).
+    REMOVE do CSV os jogos que a ESPN agora diz que foram ADIADOS (0-0 fantasma)."""
     import csv
     import os
     BRA_STATS, _ = _paths()
@@ -192,6 +207,8 @@ def _write_results(rows: list) -> int:
         if cur is None or str(cur.get("home_score") or "").strip() == "":
             have[k] = r
             novos += 1
+    for c in (cancelados or []):                          # tira o 0-0 fantasma de jogo adiado
+        have.pop((c["date"], c["home"], c["away"]), None)
     with BRA_STATS.open("w", encoding="utf-8", newline="") as fh:
         w = csv.DictWriter(fh, fieldnames=COLS, extrasaction="ignore")
         w.writeheader()
@@ -233,18 +250,44 @@ def _write_fixtures(fixtures: list) -> int:
     return mudou
 
 
+def _remove_cancelados(conn, cancelados) -> int:
+    """Apaga do banco o 0-0 FANTASMA de jogo que a ESPN reporta como adiado/cancelado (ela marca
+    adiado como 'post', o que gerou 0-0 falso antes do fix). Guarda **0-0 + data±2d** p/ NUNCA
+    tocar num resultado real."""
+    n = 0
+    for c in (cancelados or []):
+        row = conn.execute(
+            """SELECT m.match_id FROM matches m
+               JOIN teams th ON th.team_id=m.home_team_id JOIN teams ta ON ta.team_id=m.away_team_id
+               WHERE m.league='BRA' AND th.name=? AND ta.name=? AND m.home_score=0 AND m.away_score=0
+                 AND ABS(julianday(m.date)-julianday(?))<=2""",
+            (c["home"], c["away"], c["date"])).fetchone()
+        if not row:
+            continue
+        mid = row[0]
+        for t in ("match_stats", "odds_hist", "predictions"):
+            try:
+                conn.execute(f"DELETE FROM {t} WHERE match_id=?", (mid,))
+            except Exception:
+                pass
+        conn.execute("DELETE FROM matches WHERE match_id=?", (mid,))
+        n += 1
+    return n
+
+
 def atualizar_rodada(conn) -> dict:
-    """UM CLIQUE: busca a ESPN -> grava snapshots -> casa em matches/match_stats -> liquida.
-    Rede só aqui (download à parte); o cálculo segue lendo o snapshot. Devolve resumo."""
+    """UM CLIQUE: busca a ESPN -> grava snapshots -> casa em matches/match_stats -> DESFAZ
+    adiados (0-0 fantasma) -> liquida. Rede só aqui; o cálculo lê o snapshot. Devolve resumo."""
     from . import ingest, registrar
     dados = fetch()
-    novos = _write_results(dados["results"])
+    novos = _write_results(dados["results"], dados["cancelados"])
     fx = _write_fixtures(dados["fixtures"])
     BRA_STATS, _ = _paths()
     casados = ingest.load_bra_stats(conn, BRA_STATS)
+    desfeitos = _remove_cancelados(conn, dados["cancelados"])
     conn.commit()
     liq = registrar.settle(conn)
     return {"resultados_novos": novos, "stats_casados": casados,
             "fixtures_atualizados": fx, "liquidados": liq.get("preenchidos", 0),
-            "em_aberto": liq.get("em_aberto", 0), "pulados": len(dados["skipped"]),
-            "avisos": dados["skipped"][:8]}
+            "em_aberto": liq.get("em_aberto", 0), "desfeitos_adiados": desfeitos,
+            "pulados": len(dados["skipped"]), "avisos": dados["skipped"][:8]}

@@ -20,6 +20,28 @@
 .relwrap{display:flex;gap:26px;flex-wrap:wrap;align-items:center}
 .reltxt{flex:1;min-width:240px;color:var(--dim);font-size:13px;line-height:1.6}
 .spin{color:var(--dim);font-family:var(--cond);letter-spacing:.14em;text-transform:uppercase;padding:30px;text-align:center}
+.metric.clicavel{cursor:pointer;transition:transform .12s,border-color .12s}
+.metric.clicavel:hover{transform:translateY(-2px);border-color:var(--volt)}
+.gaptrack.clicavel{cursor:pointer}
+.ajuda{display:inline-block;margin-left:6px;width:15px;height:15px;line-height:15px;text-align:center;border-radius:50%;
+       background:rgba(255,255,255,.12);color:var(--dim);font-size:10px;font-weight:900;vertical-align:middle}
+.tldr{background:var(--panel2);border:1px solid var(--line);border-left:3px solid var(--volt);border-radius:12px;
+      padding:14px 18px;margin-bottom:18px;font-family:var(--cond);font-size:16px;color:var(--tx);line-height:1.5}
+.tldr b{color:var(--volt)}
+.mfundo{position:fixed;inset:0;background:rgba(4,6,10,.72);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
+.mfundo.on{display:flex}
+.mcard{background:var(--panel);border:1px solid var(--line);border-radius:18px;max-width:520px;width:100%;
+       padding:24px 28px 28px;box-shadow:0 20px 60px rgba(0,0,0,.5);animation:sobe .18s ease}
+@keyframes sobe{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.mcard h3{font-family:var(--cond);text-transform:uppercase;letter-spacing:.05em;font-size:23px;margin:0 6px 0 0}
+.mcard .mnum{font-family:var(--cond);font-weight:900;font-size:40px;color:var(--volt);line-height:1;margin:10px 0 6px}
+.mcard p{color:var(--dim);font-size:14px;line-height:1.6;margin:10px 0 0}
+.mcard .mverd{display:inline-block;font-family:var(--cond);font-weight:900;font-size:13px;letter-spacing:.05em;
+              padding:4px 12px;border-radius:8px}
+.mcard .mverd.hit{background:rgba(199,255,41,.16);color:var(--volt)}
+.mcard .mverd.miss{background:rgba(255,190,60,.14);color:var(--ambar)}
+.mx{float:right;cursor:pointer;color:var(--dim);font-size:22px;line-height:1;font-family:var(--cond)}
+.mx:hover{color:var(--tx)}
 </style>
 {% endblock %}
 {% block corpo %}
@@ -31,10 +53,12 @@
   </div>
 </div>
 <div id="corpo"><div class="spin">Medindo…</div></div>
+<div class="mfundo" id="mfundo"><div class="mcard" id="mcard"></div></div>
 {% endblock %}
 {% block js %}
 <script>
 const $ = id => document.getElementById(id);
+let CAL = null;
 async function carregar(lg){
   $("corpo").innerHTML = '<div class="spin">Medindo…</div>';
   const o = await (await fetch("/api/calibracao?league=" + lg)).json();
@@ -48,11 +72,11 @@ async function carregar(lg){
       <h2>Comparado ao mercado</h2>
       <div class="desc">O mercado (odds de fechamento, sem a margem da casa) é o benchmark mais difícil que existe — junta muita informação e dinheiro esperto. Brier menor = melhor. Lembre: o modelo usa só resultados passados (Elo), nenhuma notícia de escalação ou lesão.</div>
       <div class="grid3">
-        <div class="metric destaque"><div class="k">Modelo</div><div class="v">${m.modelo.toFixed(3)}</div><div class="s">Brier · ${m.n} jogos</div></div>
-        <div class="metric"><div class="k">Mercado</div><div class="v">${m.mercado.toFixed(3)}</div><div class="s">odds de fechamento</div></div>
-        <div class="metric"><div class="k">Chute</div><div class="v">${m.base.toFixed(3)}</div><div class="s">taxa-base (piso)</div></div>
+        <div class="metric destaque clicavel" data-ex="modelo"><div class="k">Modelo <span class="ajuda">?</span></div><div class="v">${m.modelo.toFixed(3)}</div><div class="s">Brier · ${m.n} jogos</div></div>
+        <div class="metric clicavel" data-ex="mercado"><div class="k">Mercado <span class="ajuda">?</span></div><div class="v">${m.mercado.toFixed(3)}</div><div class="s">odds de fechamento</div></div>
+        <div class="metric clicavel" data-ex="chute"><div class="k">Chute <span class="ajuda">?</span></div><div class="v">${m.base.toFixed(3)}</div><div class="s">taxa-base (piso)</div></div>
       </div>
-      <div class="gaptrack">
+      <div class="gaptrack clicavel" data-ex="escala" title="clique para entender">
         <div class="fill" style="width:${pos}%"></div>
         <div class="mk" style="left:${pos}%"></div>
         <div class="lab" style="left:0%;transform:translateX(0)">chute</div>
@@ -67,13 +91,56 @@ async function carregar(lg){
     <div class="desc">Quando ele diz "70%", acontece perto de 70%? Cada ponto é uma faixa de probabilidade das ${o.n} previsões; a linha tracejada é a calibração perfeita. Quanto mais colados na linha, mais você pode confiar nas porcentagens.</div>
     <div class="relwrap">${reliabSVG(o.reliab)}
       <div class="reltxt">
-        <div class="metric" style="margin-bottom:14px"><div class="k">Erro de calibração (ECE)</div><div class="v" style="font-size:32px">${o.ece.toFixed(1)}%</div><div class="s">quanto menor, mais confiável</div></div>
+        <div class="metric clicavel" data-ex="ece" style="margin-bottom:14px"><div class="k">Erro de calibração (ECE) <span class="ajuda">?</span></div><div class="v" style="font-size:32px">${o.ece.toFixed(1)}%</div><div class="s">quanto menor, mais confiável</div></div>
         Ponto <b style="color:#38BDF8">acima</b> da linha = o modelo foi modesto (aconteceu mais do que previu). <b style="color:#FB4D5C">Abaixo</b> = confiante demais. O tamanho do ponto é quantos casos caíram naquela faixa.
       </div>
     </div>
   </div>`;
-  $("corpo").innerHTML = mercadoHTML + calibHTML;
+  CAL = o;
+  $("corpo").innerHTML = tldr(o) + mercadoHTML + calibHTML;
 }
+function tldr(o){
+  const m = o.mercado;
+  const conf = o.ece < 2 ? "muito confiáveis" : o.ece < 5 ? "confiáveis" : "para olhar com atenção";
+  let s = `<div class="tldr"><b>Em resumo:</b> as porcentagens deste modelo são <b>${conf}</b> `
+        + `(quando ele diz X%, acontece perto disso — erra ~${o.ece.toFixed(1)}% na média)`;
+  s += m ? `, e ele chega a <b>${m.fecha_pct}%</b> do mercado, a régua mais difícil que existe. ` : `. `;
+  return s + `Toque em qualquer número abaixo para entender o que ele significa.</div>`;
+}
+const EXPLICA = (ex, o) => {
+  const m = o.mercado || {};
+  const verdECE = e => e < 2 ? ["Muito confiável", "hit"] : e < 5 ? ["Confiável", "hit"] : ["Requer atenção", "miss"];
+  const T = {
+    modelo: {t: "Nota do modelo (Brier)", n: (m.modelo != null ? m.modelo : o.brier).toFixed(3),
+      v: ["Bate o palpite às cegas", "hit"],
+      p: ["Uma nota de quão boas são as probabilidades. Para cada jogo, mede o quanto o modelo errou — o quanto deu de % pro que <b>não</b> aconteceu. <b>Menor é melhor</b>: 0 é perfeito, ~0,66 é chute às cegas.",
+          m.base != null ? `O seu ${m.modelo.toFixed(3)} está bem abaixo do chute (${m.base.toFixed(3)}) — o modelo sabe mais que um palpite. O alvo mais difícil, o mercado, está em ${m.mercado.toFixed(3)}.` : `Medido em ${o.n} previsões, sem espiar o futuro.`]},
+    mercado: {t: "Nota do mercado (Brier)", n: (m.mercado != null ? m.mercado.toFixed(3) : "—"),
+      p: ["A mesma nota, mas para as <b>odds de fechamento</b> das casas (sem a margem). É o adversário mais difícil que existe: junta dinheiro e informação de última hora (escalação, lesão, notícia).",
+          "Serve de <b>régua</b>, não de meta. Um modelo local e grátis, que só olha resultados passados, não precisa vencer o mercado — chegar perto já é um ótimo sinal."]},
+    chute: {t: "O chute (taxa-base)", n: (m.base != null ? m.base.toFixed(3) : "—"),
+      p: ["O <b>piso</b>: a nota de quem só repete a média histórica ('o mandante ganha ~47% das vezes, sempre'), sem olhar quem está jogando.",
+          "É o mínimo que o modelo precisa superar — e supera. Se não superasse, seria sinal de que não aprendeu nada com os times."]},
+    escala: {t: "Quão perto do mercado?", n: (m.fecha_pct != null ? m.fecha_pct + "%" : "—"),
+      p: ["Uma régua do <b>chute (0%)</b> ao <b>mercado (100%)</b>: qual fração do caminho entre o palpite burro e o mercado esperto o modelo já percorre.",
+          m.fecha_pct != null ? `${m.fecha_pct}% significa que ele anda ${m.fecha_pct >= 50 ? "mais da metade" : "parte"} desse caminho, ficando ${m.gap.toFixed(3)} de Brier atrás do mercado.` : ""]},
+    ece: {t: "As porcentagens são honestas? (ECE)", n: o.ece.toFixed(1) + "%", v: verdECE(o.ece),
+      p: ["Mede se as % batem com a realidade: <b>quando o modelo diz 70%, acontece perto de 70%?</b> O número é a distância média entre o previsto e o que aconteceu de verdade.",
+          `${o.ece.toFixed(1)}% quer dizer que a realidade fica a cerca de ${o.ece.toFixed(1)} ponto do previsto — ${o.ece < 2 ? "muito bem calibrado, dá pra confiar nas %" : o.ece < 5 ? "bem calibrado" : "as % desviam um pouco, cuidado"}.`]},
+  };
+  return T[ex];
+};
+function abrir(ex){
+  const c = EXPLICA(ex, CAL); if (!c) return;
+  const verd = c.v ? `<div class="mverd ${c.v[1]}">${c.v[0]}</div>` : "";
+  $("mcard").innerHTML = `<span class="mx" onclick="fechar()">✕</span><h3>${c.t}</h3>`
+    + `<div class="mnum">${c.n}</div>${verd}` + c.p.filter(Boolean).map(x => `<p>${x}</p>`).join("");
+  $("mfundo").classList.add("on");
+}
+function fechar(){ $("mfundo").classList.remove("on"); }
+$("corpo").addEventListener("click", e => { const el = e.target.closest(".clicavel"); if (el) abrir(el.dataset.ex); });
+$("mfundo").addEventListener("click", e => { if (e.target.id === "mfundo") fechar(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") fechar(); });
 function reliabSVG(bins){
   const S = 300, P = 40, W = S - 2 * P, FF = "'Barlow Condensed',sans-serif";
   const x = v => P + v / 100 * W, y = v => P + (1 - v / 100) * W;

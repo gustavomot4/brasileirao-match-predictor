@@ -4,8 +4,10 @@ da rodada 2026-05-31 (Bragantino 3-1 Inter, Palmeiras 1-0 Chape) + um jogo futur
 from scb import espn
 
 
-def _comp(state, date, competitors, details=None):
-    return {"competitions": [{"status": {"type": {"state": state}}, "date": date,
+def _comp(state, date, competitors, details=None, name=None):
+    if name is None:
+        name = "STATUS_FULL_TIME" if state == "post" else state.upper()
+    return {"competitions": [{"status": {"type": {"state": state, "name": name}}, "date": date,
                               "competitors": competitors, "details": details or []}]}
 
 
@@ -50,14 +52,28 @@ SCOREBOARD = {"events": [
     _comp("post", "2026-08-01T20:00Z", [
         _team("home", "99999", "Time Fantasma", "2"), _team("away", "2029", "Palmeiras", "0"),
     ]),
+    # ADIADO: a ESPN marca como state="post" (a pegadinha!) mas name=STATUS_POSTPONED, score 0-0.
+    # NÃO pode virar resultado — vira "cancelado" (p/ desfazer um 0-0 fantasma).
+    _comp("post", "2026-07-29T20:00Z", [
+        _team("home", "2026", "São Paulo", "0"), _team("away", "2674", "Santos", "0"),
+    ], name="STATUS_POSTPONED"),
 ]}
 
 
 def test_parse_scoreboard_conta():
     p = espn.parse_scoreboard(SCOREBOARD)
-    assert len(p["results"]) == 2
+    assert len(p["results"]) == 2                          # só os 2 STATUS_FULL_TIME
     assert len(p["fixtures"]) == 1
+    assert len(p["cancelados"]) == 1                        # o adiado NÃO virou resultado
     assert any("fora do mapa" in s for s in p["skipped"])
+
+
+def test_adiado_nao_vira_resultado():
+    """O bug real: ESPN marca adiado com state='post'. Só STATUS_FULL_TIME pode virar placar."""
+    p = espn.parse_scoreboard(SCOREBOARD)
+    assert not any(r["home"] == "Sao Paulo" for r in p["results"])   # SP×Santos adiado: fora dos resultados
+    c = p["cancelados"][0]
+    assert c["home"] == "Sao Paulo" and c["away"] == "Santos" and c["date"] == "2026-07-29"
 
 
 def test_resultado_bragantino():
@@ -140,10 +156,12 @@ def test_write_fixtures_remarca_e_preserva_e0(tmp_path, monkeypatch):
 
 def test_atualizar_rodada_orquestra(monkeypatch):
     canned = {"results": [_row(date="2026-05-31", home="Palmeiras", away="Chapecoense-SC", home_score=1, away_score=0)],
-              "fixtures": [], "skipped": ["x: fora do mapa"]}
+              "fixtures": [], "cancelados": [{"date": "2026-07-29", "home": "Sao Paulo", "away": "Santos"}],
+              "skipped": ["x: fora do mapa"]}
     monkeypatch.setattr(espn, "fetch", lambda *a, **k: canned)
-    monkeypatch.setattr(espn, "_write_results", lambda rows: len(rows))
+    monkeypatch.setattr(espn, "_write_results", lambda rows, canc=(): len(rows))
     monkeypatch.setattr(espn, "_write_fixtures", lambda fx: 0)
+    monkeypatch.setattr(espn, "_remove_cancelados", lambda conn, canc: len(canc))
     import scb.ingest as ing
     import scb.registrar as reg
     monkeypatch.setattr(ing, "load_bra_stats", lambda conn, path: 5)
@@ -156,3 +174,4 @@ def test_atualizar_rodada_orquestra(monkeypatch):
     out = espn.atualizar_rodada(FakeConn())
     assert out["resultados_novos"] == 1 and out["stats_casados"] == 5
     assert out["liquidados"] == 3 and out["em_aberto"] == 1 and out["pulados"] == 1
+    assert out["desfeitos_adiados"] == 1                    # o adiado foi desfeito

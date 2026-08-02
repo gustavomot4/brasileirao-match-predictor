@@ -132,6 +132,7 @@ $("rUpdate").onclick = async () => {
     if (o.erro) throw new Error(o.erro);
     $("rMsg").textContent = `ESPN: ${o.resultados_novos} resultados novos · ${o.stats_casados} com stats · `
       + `calendário ${o.fixtures_atualizados} · liquidados ${o.liquidados} (${o.em_aberto} em aberto)`
+      + (o.desfeitos_adiados ? ` · ${o.desfeitos_adiados} adiados desfeitos` : "")
       + (o.pulados ? ` · ${o.pulados} pulados` : "");
     if (o.liquidados > 0 || o.resultados_novos > 0) setTimeout(() => location.reload(), 1500);
   }catch(e){ $("rMsg").textContent = "Erro: " + e.message; }
