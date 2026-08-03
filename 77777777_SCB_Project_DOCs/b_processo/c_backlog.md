@@ -12,7 +12,7 @@ data: 2026-07-16
 ## ▶ Ações do Gustavo (agora)
 
 - [ ] **[M6.7] Rebuild da v0.2 na SUA máquina** — `python -m pytest -q` (esperado **63**) → `python -m scb.elo_engine` → `python -m scb.features_pit` → `python -m scb.draw_curve` → `python -m scb.predictor` → `python -m scb.backtest_harness` (esperado **BRA 0,6131** / E0 0,5899) → `python -m scb.simulate_league --season 2026`
-- [ ] **[OPERAÇÃO] Registrar a próxima rodada do BRA 2026 antes do kickoff** ([[Operacao BRA 2026]]) — toda rodada, sem exceção
+- [ ] **[OPERAÇÃO] Registrar a próxima rodada do BRA 2026 antes do kickoff** ([[a_runbook_operacao|Operação BRA 2026]]) — toda rodada, sem exceção
 
 ## 🔜 Próximo
 

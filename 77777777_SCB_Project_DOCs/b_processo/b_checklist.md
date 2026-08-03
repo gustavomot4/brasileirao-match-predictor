@@ -10,10 +10,10 @@ data: 2026-07-15
 > Regra 5 do pipeline: **nada é aceito sem passar no portão** — não o que "parece bom". Usar a seção do tipo de entrega. Falhou um item ⇒ volta com delta, não regenera.
 
 ## Qualquer entrega
-- [ ] A sessão usou o prompt do papel + CONTEXT.md + só o arquivo do momento (contexto enxuto)?
+- [ ] A sessão usou o prompt do papel + a_contexto_fonte.md + só o arquivo do momento (contexto enxuto)?
 - [ ] A mudança veio como **delta** (trecho alterado), não documento/módulo regenerado?
 - [ ] Decisão nova virou **D-NN**? Bug achado virou **QA-NN** citado no commit?
-- [ ] CONTEXT.md atualizado **por substituição** e o datado foi para o CHANGELOG?
+- [ ] a_contexto_fonte.md atualizado **por substituição** e o datado foi para o CHANGELOG?
 - [ ] Nenhum dado/fonte inventado (lacuna continua declarada)?
 
 ## Código (módulo)
@@ -38,7 +38,7 @@ data: 2026-07-15
 - [ ] Nenhuma métrica de treino vendida como teste; split e seeds declarados
 
 ## Documentos
-- [ ] CONTEXT.md continua ≤ 1 página
+- [ ] a_contexto_fonte.md continua ≤ 1 página
 - [ ] Doc novo diz status (atual/rascunho/histórico) e data
 - [ ] Números sobre a liga têm origem (medição da M1+ ou [a medir]/[a calibrar])
 

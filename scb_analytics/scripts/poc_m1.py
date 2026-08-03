@@ -6,7 +6,7 @@ Roda NA MÁQUINA DO GUSTAVO (download = passo à parte, regra 2; o cálculo depo
     python scripts/poc_m1.py            # baixa p/ dados/ e gera dados/poc_m1_report.md
     python scripts/poc_m1.py --offline  # só re-analisa o que já está em dados/
 
-Responde as 5 perguntas de contexto/DADOS.md §4:
+Responde as 5 perguntas de ../77777777_SCB_Project_DOCs/a_contexto/e_dados.md §4:
  1. temporadas/linhas/colunas por temporada; fechamento desde quando (BRA e E0)
  2. qualidade: duplicatas ±3d, placares nulos, aliases de nome de time
  3. taxa de empate e gols/jogo por liga e por era

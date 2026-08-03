@@ -96,7 +96,7 @@ na Europa). Re-rode o portão POR LIGA; o contexto do dado muda.
   Diga isso; não finja que está logo ali.
 
 ## Como trabalhar neste repo (prático)
-- Comece por [[CONTEXT]] + o prompt do papel ([[00-bootstrap-contexto]] … [[05-revisao-entrega]])
+- Comece por [[a_contexto_fonte|CONTEXT]] + o prompt do papel ([[00_bootstrap_contexto|00_bootstrap_contexto]] … [[05_revisao_entrega|05_revisao_entrega]])
   + só o arquivo do momento. Peça um **delta**, não reescreva do zero (D-02: o port existe
   justamente para não repagar bugs já resolvidos).
 - Código novo = teste (inclusive PIT/anti-look-ahead). Mudança de fórmula = bump de
@@ -104,7 +104,7 @@ na Europa). Re-rode o portão POR LIGA; o contexto do dado muda.
 - Nomes de time no padrão football-data (EN) internamente; **"PRE" é só display** (o código é
   `E0`, e dados/modelo dependem disso).
 - Termine entregando os arquivos, resposta concisa, e — se decidiu algo — registre o **D-NN** e
-  atualize o [[CONTEXT]] por substituição. O datado vai pro [[CHANGELOG]].
+  atualize o [[a_contexto_fonte|CONTEXT]] por substituição. O datado vai pro [[a_changelog|CHANGELOG]].
 
 ## A meta-lição
 O que torna este projeto bom não é esperteza — é **disciplina que compõe**: portão que barra,

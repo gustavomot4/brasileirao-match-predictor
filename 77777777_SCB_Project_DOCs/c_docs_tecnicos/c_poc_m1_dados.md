@@ -61,7 +61,7 @@ Tabela completa: `scb_analytics/dados/poc_m1_report.md` (committada). Destaques 
 - Pinnacle pré+fechamento **desde 2012/13**; conjunto completo de fechamento (B365C…) **desde 2019/20** [medido — bate com o notes.txt]; 2025/26 com PS a 55% (mesma instabilidade). Odds pré de outras casas (B365H…) existem antes de 2012/13 — o probe só olhou PS*; grade completa por coluna fica no ingest da M2.
 - Empate moderno 18,7–24,5% ≪ BRA (~27%) e gols 2,7–3,28 ≫ BRA — os dois regimes são MUITO diferentes: valida a decisão multi-liga por config (D-03) e as curvas por liga (D-07).
 
-**Veredito:** as 5 perguntas de [[DADOS]] §4 respondidas; nenhuma surpresa estrutural (a única, Pinnacle-2026, tem mitigação via fallback e já estava antecipada). **M1 FECHADA → M2 aberta (schema + ingest).** Micro-nota: warning cosmético de parsing de data no relatório — o ingest da M2 usa formato explícito `dd/mm/yyyy`.
+**Veredito:** as 5 perguntas de [[e_dados|DADOS]] §4 respondidas; nenhuma surpresa estrutural (a única, Pinnacle-2026, tem mitigação via fallback e já estava antecipada). **M1 FECHADA → M2 aberta (schema + ingest).** Micro-nota: warning cosmético de parsing de data no relatório — o ingest da M2 usa formato explícito `dd/mm/yyyy`.
 
 ## QA do 1º run (2026-07-15, achados do Gustavo — corrigidos)
 

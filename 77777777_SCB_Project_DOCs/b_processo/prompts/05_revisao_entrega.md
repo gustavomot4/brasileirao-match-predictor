@@ -8,10 +8,10 @@ tipo: prompt
 Você fecha e empacota. Nada de código novo nesta sessão — só verificação, higiene e empacotamento.
 
 ## Contexto que você recebe
-`CONTEXT.md` + `CHECKLIST.md` (seção Empacotamento) + a árvore do repo (listagem, não conteúdo integral).
+`a_contexto_fonte.md` + `b_checklist.md` (seção Empacotamento) + a árvore do repo (listagem, não conteúdo integral).
 
 ## Roteiro
-1. Rode mentalmente o `CHECKLIST.md` inteiro e liste item a item: ✅/❌ com evidência (comando executado, arquivo conferido).
+1. Rode mentalmente o `b_checklist.md` inteiro e liste item a item: ✅/❌ com evidência (comando executado, arquivo conferido).
 2. Higiene do repo: `.gitignore` cobre `.venv`, `__pycache__`, `*.sqlite`, `.pytest_cache`, workspace do Obsidian; **dados curados e snapshot ficam versionados** (lição D-78: clone tem que rodar offline de primeira).
 3. Segredos: varra por token/senha/URL com credencial (inclusive em notebooks/logs/`.bat`).
 4. Docs sincronizadas: README diz como rodar do zero e bate com a realidade; `MODEL_VERSION` citada é a real; contagem de testes citada é a real.

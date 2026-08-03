@@ -12,20 +12,20 @@ aliases: ["Papel do Gustavo", "Como trabalhar neste projeto"]
 
 ## Suas 6 responsabilidades
 
-1. **Guardião do portão.** Nada é aceito porque "parece bom". Fim de entrega = rodar a seção certa do [[CHECKLIST]]. Falhou item → devolve pedindo **delta** (nunca "refaz tudo").
-2. **Decisor de negócio.** Agente não muda regra de negócio nem rumo do projeto. Toda questão Q-NN do [[DECISIONS]] é sua (ex.: Q-01, teto do mercado). Sua resposta vira D-NN.
+1. **Guardião do portão.** Nada é aceito porque "parece bom". Fim de entrega = rodar a seção certa do [[b_checklist|CHECKLIST]]. Falhou item → devolve pedindo **delta** (nunca "refaz tudo").
+2. **Decisor de negócio.** Agente não muda regra de negócio nem rumo do projeto. Toda questão Q-NN do [[f_decisoes_arquitetura|DECISIONS]] é sua (ex.: Q-01, teto do mercado). Sua resposta vira D-NN.
 3. **Operador da máquina real.** `python -m pytest -q` roda na SUA máquina (o sandbox mente — lição D-14/16 do SCM), assim como `git commit/push` e os downloads de snapshot.
 4. **Fonte dos dados manuais.** Desfalques (JSON), resultados da rodada quando a fonte atrasa (`resultados_extra`), prior de promovidos. Se você não preencher, fica **lacuna declarada** — nunca inventada.
 5. **Disciplina operacional.** Registrar TODA rodada **antes do kickoff** (a partir da M5). A lição mais cara do SCM: só 19 de 81 jogos registrados quase matou a pergunta principal sem resposta.
-6. **Higiene de contexto.** Conferir que o [[CONTEXT]] foi atualizado **por substituição** (≤1 página) e o datado foi para o [[CHANGELOG]]. O agente faz; você confere.
+6. **Higiene de contexto.** Conferir que o [[a_contexto_fonte|CONTEXT]] foi atualizado **por substituição** (≤1 página) e o datado foi para o [[a_changelog|CHANGELOG]]. O agente faz; você confere.
 
 ## O ciclo de toda sessão de trabalho (90% do dia a dia)
 
-1. Abrir chat novo → colar o **prompt do papel** (`prompts/`) + **[[CONTEXT]]** + **só o arquivo do momento**
+1. Abrir chat novo → colar o **prompt do papel** (`prompts/`) + **[[a_contexto_fonte|CONTEXT]]** + **só o arquivo do momento**
 2. Pedir a entrega em **delta**
-3. Conferir no [[CHECKLIST]] + rodar `pytest` na sua máquina
+3. Conferir no [[b_checklist|CHECKLIST]] + rodar `pytest` na sua máquina
 4. Aceitou → **D-NN/QA-NN** registrado → commit (mensagem vem pronta do agente)
-5. [[CONTEXT]] atualizado por substituição; datado no [[CHANGELOG]]
+5. [[a_contexto_fonte|CONTEXT]] atualizado por substituição; datado no [[a_changelog|CHANGELOG]]
 
 ## Onde você entra em cada milestone
 

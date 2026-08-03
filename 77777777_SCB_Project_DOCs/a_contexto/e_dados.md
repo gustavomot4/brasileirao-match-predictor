@@ -52,7 +52,7 @@ match_stats(match_id, ht, shots, sot, fouls, corners, yellow, red,   -- DESCRITI
 Restrições da stack declaradas no schema (lição SPO): SQLite sem enum → `stage`/`league` são TEXT com CHECK; datas ISO-8601 TEXT; probabilidade REAL em [0,1].
 
 ## 4. POC de dados (M1) — o que ela precisa responder
-> **Estado 2026-07-15:** perguntas 1 parcialmente medida, 4 decidida (D-14: sem Kaggle; burn-in interno 2012–13), 5 parcial (notes.txt + leagues.json versionados). 1(grades)/2/3 saem do `scripts/poc_m1.py` na máquina do Gustavo. Detalhe: [[POC-M1-dados (2026-07-15)]].
+> **Estado 2026-07-15:** perguntas 1 parcialmente medida, 4 decidida (D-14: sem Kaggle; burn-in interno 2012–13), 5 parcial (notes.txt + leagues.json versionados). 1(grades)/2/3 saem do `scripts/poc_m1.py` na máquina do Gustavo. Detalhe: [[c_poc_m1_dados|POC M1 — dados (2026-07-15)]].
 
 1. Inventário real: temporadas cobertas, nº de jogos, colunas presentes por temporada (odds de fechamento existem desde quando?) — BRA e E0.
 2. Qualidade: duplicatas (rodar o detector ±2d), placares nulos, times renomeados entre temporadas (mapa de aliases).

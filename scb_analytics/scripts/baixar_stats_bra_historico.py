@@ -1,6 +1,6 @@
 """baixar_stats_bra_historico — BACKFILL de temporadas PASSADAS do Brasileirão (2026-07-22).
 
-Por quê: a sonda (sondar_api.py) confirmou que o trial de 'acesso completo' libera o
+Por quê: a sondagem da API (2026-07-22) confirmou que o trial de 'acesso completo' libera o
 histórico via query param -> GET /campeonatos/10/partidas?temporada=AAAA (200 OK).
 Uma temporada só (a 2026 parcial) NÃO gateia termo de modelo; o histórico SIM. Este é o
 ÚNICO ganho perecível do trial: capturar um snapshot LOCAL das temporadas passadas com

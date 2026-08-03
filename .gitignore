@@ -14,14 +14,20 @@ node_modules/
 *.tmp
 *.zip
 
+# Descartáveis (sondas de API, rascunhos do editor — não têm dono, não entram)
+_sonda_*.json
+Sem título*.base
+Sem título*.canvas
+
 # Segredos
 .env
 *.token
 *credentials*
 
-# Obsidian (workspace volátil)
+# Obsidian (workspace e visualização voláteis)
 .obsidian/workspace.json
 .obsidian/workspace-mobile.json
+.obsidian/graph.json
 
 # SO
 .DS_Store

@@ -5,9 +5,9 @@ tipo: planejamento
 data: 2026-07-15
 ---
 
-# PLANO.md — SCB v1.0
+# b_plano.md — SCB v1.0
 
-> Fase 1 do pipeline. **Este plano está CONGELADO** (D-11): mudança de rumo vira D-NN novo, não replanejamento do zero. Contexto: [[CONTEXT]]. Contrato matemático detalhado: [[MODELO-MATEMATICO]] (congelado junto, como contrato SCB v1.0).
+> Fase 1 do pipeline. **Este plano está CONGELADO** (D-11): mudança de rumo vira D-NN novo, não replanejamento do zero. Contexto: [[a_contexto_fonte|CONTEXT]]. Contrato matemático detalhado: [[d_modelo_matematico|MODELO-MATEMATICO]] (congelado junto, como contrato SCB v1.0).
 
 ## 1. Resumo executivo (5 linhas)
 Port evoluído do SCM para ligas de pontos corridos, **multi-liga por configuração**: a Premier League (E0, dado rico/longo) valida o port; o **Brasileirão (BRA) é a entrega**. O núcleo Elo→Poisson→ensemble transfere intacto (formas fixas, coeficientes recalibrados por liga); sai o que é de Copa (altitude, confederação, mata-mata); entra o que é de liga (mando central, curva de empate por liga, simulador de tabela, temporadas/promovidos, **odds automáticas com fechamento** — a maior melhoria estrutural, que torna CLV e benchmark de mercado automáticos). Meta de operação: registro prospectivo imutável ainda na temporada 2026 do Brasileirão, **depois** do baseline validado por backtest.
@@ -36,18 +36,18 @@ Contratos-chave: `predictions` é a interface única entre motor e consumidores 
 
 | M | Entrega | Portão de aceite |
 |---|---|---|
-| **M0** | Kit de contexto (este) | CONTEXT.md ≤1 pág; critério de aceite escrito ✅ |
-| **M1** | **POC de dados**: download E0+BRA, inventário (temporadas, colunas, odds de fechamento, qualidade), `leagues.json`, decisão do aquecimento Kaggle | inventário respondendo às 5 perguntas de [[DADOS]]; D-NNs registrados |
+| **M0** | Kit de contexto (este) | a_contexto_fonte.md ≤1 pág; critério de aceite escrito ✅ |
+| **M1** | **POC de dados**: download E0+BRA, inventário (temporadas, colunas, odds de fechamento, qualidade), `leagues.json`, decisão do aquecimento Kaggle | inventário respondendo às 5 perguntas de [[e_dados|DADOS]]; D-NNs registrados |
 | **M2** | **Schema + ingest** parametrizado por liga (com dedup, extra, idempotência) | migration roda; contagens batem com a fonte; `pytest` do módulo verde (idempotência + guarda ±2d + anti-nulos) |
 | **M3** | **Port do motor**: elo_engine → features_pit → predictor (curva de empate da liga, perna AD, ensemble) — 1 módulo por vez, por delta | testes por módulo (PIT/anti look-ahead, soma=1, piso conserva T_m, consistência produção↔backtest); pipeline E2E roda na E0 |
 | **M4** | **Backtest baseline**: harness walk-forward, 4 réguas, primeiro na **E0**, depois **BRA** | **Brier < uniforme E < taxa-base com IC que não cruza zero (por liga)**; ECE e cobertura de banda reportados; distância ao mercado reportada. Congela `baseline-scb-v0.1` |
 | **M5** | **Simulador de liga** + registrar/monitor/report adaptados | invariantes (Σposições=1 por clube, Σtítulo=1, real travado); runbook da rodada escrito; registro prospectivo do BRA 2026 **começa aqui** |
 | **M6** | **Calibração + fila do portão**: H, K, θ/κ/T_base, curva de empate; depois candidatos C1–C6 um a um | cada adoção com IC>0 + guardas + kill-switch; rejeição registrada como D-NN (memória) |
-| **M7** | **Web + entrega**: telas adaptadas, launcher, CHECKLIST de empacotamento | QA adversarial (prompts/03) sem achado crítico/alto aberto; zip sem deps/segredos; `pytest` completo verde na máquina do Gustavo |
+| **M7** | **Web + entrega**: telas adaptadas, launcher, CHECKLIST de empacotamento | QA adversarial (`prompts/03_qa_adversarial`) sem achado crítico/alto aberto; zip sem deps/segredos; `pytest` completo verde na máquina do Gustavo |
 
 Ordem M4→M5 é deliberada: operar o BRA 2026 (M5) só depois do baseline validado (regra "baseline primeiro"). M6 corre em paralelo à operação — evolução gateada enquanto o registro prospectivo acumula.
 
-## 4. Decisões já tomadas (resumo — detalhe em [[DECISIONS]])
+## 4. Decisões já tomadas (resumo — detalhe em [[f_decisoes_arquitetura|DECISIONS]])
 Port do `scm_analytics` (D-02) · multi-liga desde o dia 1, E0 valida/BRA entrega (D-03) · football-data como fonte primária (D-04) · lista-morta re-gateia (D-05) · termos de Copa OFF (D-06) · curva de empate por liga (D-07) · walk-forward por temporada (D-08) · teto de mercado 0,20 mantido, Q-01 aberta (D-09) · alvo temporada 2026 em andamento (D-10).
 
 ## 5. Riscos e mitigações (top 6)

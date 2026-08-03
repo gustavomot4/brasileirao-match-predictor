@@ -8,7 +8,7 @@ data: 2026-07-15
 # Modelo matemático do SCB — contrato v1.0 (CONGELADO)
 
 > Base: contrato **v5.0 do SCM** (`camada1-planejamento-v5` + apêndice de formas) e evolução validada até `baseline-v0.5.1-confed` (D-01..D-85). Este doc diz **o que fica, o que sai, o que recalibra e o que é candidato** ao portar de Copa (seleções, mata-mata) para **liga de clubes em pontos corridos**. Todo número marcado **[a calibrar]** sai do backtest, nunca de decreto; todo valor esperado sobre a liga marcado **[a medir na M1]** é confirmado na POC de dados — **não inventar**.
-> **CONGELADO como contrato SCB v1.0 em 2026-07-15 (D-11).** Mudar fórmula daqui em diante = nova versão (`MODEL_VERSION`) + D-NN — nunca edição silenciosa. Preencher um [a calibrar]/[a medir] com valor MEDIDO não é mudança de fórmula (registrar no [[DECISIONS]] mesmo assim).
+> **CONGELADO como contrato SCB v1.0 em 2026-07-15 (D-11).** Mudar fórmula daqui em diante = nova versão (`MODEL_VERSION`) + D-NN — nunca edição silenciosa. Preencher um [a calibrar]/[a medir] com valor MEDIDO não é mudança de fórmula (registrar no [[f_decisoes_arquitetura|DECISIONS]] mesmo assim).
 
 ## 0. Princípio (herdado e reafirmado)
 

@@ -8,6 +8,13 @@ tipo: log
 
 > Log datado, append-only. **Não é carregado nas sessões** (o presente mora no CONTEXT.md). Uma linha por evento relevante; detalhe fica no commit/D-NN.
 
+## 2026-08-02 — Faxina do repositório + padrão de organização (espelho do SPO)
+- **Removido o que não tinha dono** (12 arquivos): rascunhos vazios do Obsidian (`Sem título.base`, `Sem título 1.base`, `Sem título.canvas`, `2026-07-29.md` — 0 bytes) · `dados/escudos-pendentes.md` (o próprio arquivo se declarava obsoleto desde a D-37) · `scb_analytics/BACKLOG.md` (duplicata parada em 2026-07-14, enquanto o BACKLOG da raiz seguia vivo) · as 4 sondas `dados/_sonda_*.json` (370 KB de respostas da API-Futebol, aposentada pela D-42) e `scripts/sondar_api.py`, a sonda que as gerava · `.obsidian/graph.json` destrackeado (estado de visualização volátil). Caches locais (`__pycache__`, `.pytest_cache`) apagados. Nada de código foi tocado: **99 testes verdes** depois da faxina.
+- **Padrão de organização adotado do SPO** — toda a documentação passou para `77777777_SCB_Project_DOCs/` (`a_contexto/` a verdade · `b_processo/` como se trabalha, com `prompts/` · `c_docs_tecnicos/` runbook e evidências · `d_historico/` este log), nomes em `prefixo_de_ordem` + `snake_case` sem acento. A raiz ficou com README + configuração. Movimentação com `git mv` (histórico preservado); os ~90 wikilinks do Obsidian e os caminhos relativos do código foram reescritos — **0 links quebrados**.
+- **README da raiz reescrito no formato SPO** (o que é · como foi feito · como rodar · comandos · estrutura · convenções · tecnologias) e **`b_processo/e_padrao_do_repositorio.md`** criado: o padrão em 9 seções, escrito para ser copiado em projetos novos.
+- **Contagem de testes:** medido **99 passed** (o commit `7971301` somou 1 teste ao `test_espn.py`); os docs ainda diziam 98. READMEs atualizados; **o CONTEXT ainda diz 98 — corrigir no próximo rebuild do dono.**
+- `.gitignore` fechado contra a reincidência: `_sonda_*.json`, `Sem título*`, `.obsidian/graph.json`.
+
 ## 2026-07-22 (b) — ESPN grátis substitui a API-Futebol na operação + Prospectivo com filtros (D-42, D-43)
 - **Botão "⟳ Atualizar rodada (ESPN)" no Prospectivo (D-42)** — `scb/espn.py`: parser determinístico da API pública da ESPN (grátis, sem chave). Um clique (`/api/atualizar`) busca placar + estatísticas (SoT, posse, escanteios, faltas, cartões, HT do minuto do gol) + calendário futuro, grava nos snapshots, casa em `matches`/`match_stats` e **liquida**. Mapa dos 20 times ancorado no ID estável da ESPN; time fora do mapa é pulado com aviso (não inventa). Substitui a API-Futebol paga: o trial acabou e o `?temporada=` NÃO expunha histórico — **falso positivo** que eu tinha cantado no `200` do probe, pego pela data (2026-07-22) no `[CHECK]`. Regras intactas: R$0, download à parte, fonte ESTRUTURADA (não LLM adivinhando). ESPN é API não-oficial (ToS zona cinza, uso pessoal). +9 testes (parser contra valores reais 2026-05-31, gravadores, orquestração) → **98 no total**. **Confirmado ao vivo pelo Gustavo.**
 - **Prospectivo: filtros + auditoria de acerto (D-43)** — filtros client-side (liga · liquidado/aberto · **acerto/erro** · busca por time) que escalam p/ centenas de jogos; selo **✓ ACERTOU / ✗ ERROU** + o dado informativo **"modelo dava X% no que aconteceu"**; resumo que reage ao filtro (acertos%, Brier do recorte). **Elo-points ficou de fora** (força do time ≠ qualidade da previsão — corte de valor à la D-40).
@@ -112,19 +119,19 @@ tipo: log
 - Estado honesto da evolução: 2 candidatos testados, 2 rejeitados com números — baseline v0.1 segue o melhor modelo. Fila: M6.3 (mando rolling PIT), C1/C2/C4/C5/C6, banda.
 
 ## 2026-07-16 (e) — M5 FECHADA (oficial) + M6.1 rodada e REJEITADA (o portão protegeu)
-- M5 oficial: 50 passed; tabela BRA 2026 na tela do Gustavo (Palmeiras 78,8%). Operação liberada ([[Operacao BRA 2026]]).
+- M5 oficial: 50 passed; tabela BRA 2026 na tela do Gustavo (Palmeiras 78,8%). Operação liberada ([[a_runbook_operacao|Operação BRA 2026]]).
 - M6.1 (`scb/calibrate.py`): grid estático de H_pred/T_base com era de validação separada → **REJEITADO (D-19)**: candidato do treino (H=120, T_base=2,20) piora gols na validação (IC<0). Causa: não-estacionariedade (mando ↓ pós-COVID, gols ↑ recentes) — regime inverte entre eras, calibração estática corrige ao contrário. Mesmo padrão D-25/D-40 SCM.
 - Rota da M6: C3 (janela móvel PIT de gols — família aprovada no SCM D-84) e candidato novo "mando rolling PIT". Baseline v0.1 intacto.
 
 ## 2026-07-16 (d) — M4 FECHADA (oficial, números idênticos) + M5 pronta
 - Run oficial da M4 reproduziu o sandbox dígito a dígito (47 passed; pipeline determinístico) → **`baseline-scb-v0.1` CONGELADO (D-17)**.
-- M5: `simulate_league` (MC da temporada, fixtures derivadas, real travado, desempate D-18/Q-03), `predict_match` (porta da frente = backtest, D-34), `registrar` (imutável + settle ±2d + report power-aware), runbook [[Operacao BRA 2026]]. 3 testes (50 no total).
+- M5: `simulate_league` (MC da temporada, fixtures derivadas, real travado, desempate D-18/Q-03), `predict_match` (porta da frente = backtest, D-34), `registrar` (imutável + settle ±2d + report power-aware), runbook [[a_runbook_operacao|Operação BRA 2026]]. 3 testes (50 no total).
 - E2E real BRA 2026 (rodada ~18): **Palmeiras 78,8% título · Flamengo 20,7% · Fluminense 0,4%; Chapecoense 100% Z4** — 5.000 sims em 3s, seed fixa.
 - Q-02 fechada formalmente; Q-03 → Gustavo confirma ordem CBF; monitor de drift movido p/ M6/M7 (sem registros acumulados ainda, não há o que monitorar).
 
 ## 2026-07-16 (c) — M4: PORTÃO DO BASELINE PASSOU (sandbox; aguarda run oficial)
 - `scb/backtest_harness.py`: walk-forward por temporada (burn-in 2), curva de empate POR FOLD (anti-vazamento), previsões on-the-fly, 4 réguas, Brier/LogLoss/RPS/ECE/banda, bootstrap pareado B=10k seed=12345 vetorizado. +5 testes (47 no total).
-- **Resultados** ([[Backtest baseline (2026-07-16)]]): BRA n=4.736 Brier **0,6146** — bate uniforme (+0,0521), taxa-base (+0,0175) e Elo-puro (+0,0025), IC>0 em todos; E0 n=11.780 **0,5899** (+0,0767/+0,0530/+0,0052). Mercado (fechamento) à frente ~2pp nas duas — teto honesto. BRA > E0 em dificuldade, como a viabilidade previa. Banda sub-cobre extremos (padrão D-30 SCM) → M6. D-17 registrada.
+- **Resultados** ([[b_backtest_baseline|Backtest baseline (2026-07-16)]]): BRA n=4.736 Brier **0,6146** — bate uniforme (+0,0521), taxa-base (+0,0175) e Elo-puro (+0,0025), IC>0 em todos; E0 n=11.780 **0,5899** (+0,0767/+0,0530/+0,0052). Mercado (fechamento) à frente ~2pp nas duas — teto honesto. BRA > E0 em dificuldade, como a viabilidade previa. Banda sub-cobre extremos (padrão D-30 SCM) → M6. D-17 registrada.
 
 ## 2026-07-16 (b) — M3.4 (predictor) pronto: MOTOR COMPLETO aguardando run oficial
 - `scb/predictor.py`: port fiel (piso conserva T_m D-22; propagação determinística por estratos D-30; A1; clamps; ensemble 0,56/0,44) com T_base POR LIGA (placeholder = medição M1) e leitura C1 via `draw_curve.ved_from_dr` (núcleo único D-43, ε do predictor). Fora: estilo/altitude/KO (D-06). Hooks: δ_ata (desfalques), perna AD com w_ad=0 (re-gate na liga, D-05). `MODEL_VERSION=scb-v0.1-baseline`.

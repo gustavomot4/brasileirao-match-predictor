@@ -1,17 +1,17 @@
 # scb_analytics — código do SCB
 
 Port evoluído do `scm_analytics` (D-02) para ligas de pontos corridos, multi-liga (D-03).
-Contrato: `../contexto/MODELO-MATEMATICO.md` (SCB v1.0, congelado). **Verdade viva: `../CONTEXT.md`.**
+Contrato: `../77777777_SCB_Project_DOCs/a_contexto/d_modelo_matematico.md` (SCB v1.0, congelado). **Verdade viva: `../77777777_SCB_Project_DOCs/a_contexto/a_contexto_fonte.md`.**
 
 **Estado (2026-07-22):** M0–M7.2 executadas — modelo oficial **`scb-v0.4-sot-goals-e0`**
 (walk-forward BRA 0,6131 / E0 0,5894). Operação da rodada = **ESPN grátis, 1 clique** (D-42,
-substituiu a API-Futebol paga). Detalhe e histórico no vault (`../DECISIONS.md`, `../CHANGELOG.md`).
+substituiu a API-Futebol paga). Detalhe e histórico no vault (`../77777777_SCB_Project_DOCs/a_contexto/f_decisoes_arquitetura.md`, `../77777777_SCB_Project_DOCs/d_historico/a_changelog.md`).
 
 ## Rodar (Windows/PowerShell, na raiz `scb_analytics`)
 
 ```
 pip install -r requirements.txt
-python -m pytest -q                  # esperado: 98 passed
+python -m pytest -q                  # esperado: 99 passed
 
 python -m scb.ingest --download      # 1x, baixa snapshot (BRA + 33 temporadas E0)
 python -m scb.ingest                 # dados/*.csv -> dados/scb.sqlite (OFFLINE)
@@ -52,7 +52,7 @@ via API-Futebol, D-36) · **E0 12.704**.
 
 Dados manuais na rodada (lag da fonte): copie `dados/resultados_extra.csv.example` →
 `resultados_extra.csv` e preencha; o ingest carrega sozinho com a guarda anti-duplicata.
-Operação da temporada: `../Operacao BRA 2026.md`.
+Operação da temporada: `../77777777_SCB_Project_DOCs/c_docs_tecnicos/a_runbook_operacao.md`.
 
 ## Operar a rodada (1 clique)
 

@@ -8,7 +8,7 @@ tipo: prompt
 Sessão separada com um único objetivo: **quebrar** o que foi construído. Você não melhora, não refatora, não elogia — você procura onde mente.
 
 ## Contexto que você recebe
-`CONTEXT.md` + o código sob ataque + `CHECKLIST.md` (as restrições são o contrato a verificar).
+`a_contexto_fonte.md` + o código sob ataque + `b_checklist.md` (as restrições são o contrato a verificar).
 
 ## Onde atacar primeiro (histórico de onde o SCM sangrou)
 1. **Look-ahead disfarçado:** alguma feature usa informação do próprio jogo ou de jogo posterior? (ratings pós-jogo, curva calibrada no período de teste, curva de empate/reliab vazando o teste)
